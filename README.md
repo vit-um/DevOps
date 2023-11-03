@@ -30,4 +30,15 @@ go mod tidy
 В разі якщо помилки не зникли можна спробувати зробити [ініціацію робочого простору](https://github.com/golang/tools/blob/master/gopls/doc/workspace.md#go-workspaces-go-118)
 
 7. Добре буде якщо зібрані та службові файли не будуть потрапляти на `github` отже створюємо [.gitignore](.gitignore)
- 
+
+8. Збираємо застосунок: 
+`go build -o bin/app src/main.go`
+
+9. Робимо commit та push-имо:  
+```bash
+git add *
+git add .gitignore 
+git commit -m "bin"
+git push
+```
+Заходимо на github
