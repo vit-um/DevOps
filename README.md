@@ -49,3 +49,6 @@ git push
 ![img](.img/t2_port.png)  
 ![img](.img/t2_web.png)
 
+11. Далі спробуємо запакувати розроблений вище код у контейнер та доставити його споживачу. Для цього нам потрібна буде реєстрація на [docker hub](https://hub.docker.com/) та встановлене розширення `Docker for Visual Studio Code` 
+
+12. Створюємо в теці проекту `Task2` файл `Dockerfile` 
