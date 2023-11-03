@@ -32,7 +32,7 @@ go mod tidy
 7. Добре буде якщо зібрані та службові файли не будуть потрапляти на `github` отже створюємо [.gitignore](.gitignore)
 
 8. Збираємо застосунок: 
-`go build -o bin/app src/main.go`
+`cd Task2 && go build -o bin/app src/main.go`
 
 9. Робимо commit та push-имо:  
 ```bash
@@ -41,4 +41,10 @@ git add .gitignore
 git commit -m "bin"
 git push
 ```
-Заходимо на github
+Заходимо на github щоб пересвідчитись у відсутності там забороненої до синхронізації теки bin та її вмісту.
+
+10. Запускаємо проект `bin/app` та перевіряємо його роботу одним з методів:
+![img](./img/t2_curl.png)  
+![img](./img/t2_port.png)  
+![img](./img/t2_web.png)
+
