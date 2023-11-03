@@ -7,5 +7,5 @@ import (
 
 func main() {
 	fmt.Println("Hello World!")
-	http.ListenAndServe(":8080", http.FileServer(http.Dir("")))
+	http.ListenAndServe(":8080", http.FileServer(http.Dir("./html")))
 }
