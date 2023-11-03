@@ -45,7 +45,7 @@ git push
 
 10. Запускаємо проект `bin/app` та перевіряємо його роботу одним з методів:  
 
-![img](./img/t2_curl.png)  
-![img](./img/t2_port.png)  
-![img](./img/t2_web.png)
+![img](.img/t2_curl.png)  
+![img](.img/t2_port.png)  
+![img](.img/t2_web.png)
 
