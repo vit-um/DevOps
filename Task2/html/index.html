@@ -9,7 +9,7 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms)); 
 }
 
-async function play(frame = 1, s = 500) {
+async function play(frame, s=500) {
 
 localStorage.frame_num = frame;
 
@@ -28,6 +28,14 @@ document.getElementById('Main').innerHTML = "";
 function stop(s) {
   s.stop();
 }
+
+async function runAnimation() {
+  for (let frame = 1; frame <= 15; frame++) {
+    await play(frame, 500); // Викликаємо функцію play зі зміненою frame
+    await sleep(6000);  // Очікуємо 500 мілісекунд (0.5 секунди)
+  }
+}
+
 </script>
 <style>
 /* Style */
@@ -66,8 +74,8 @@ svg.finished * {
   localStorage.pause = 0;
  //console.log(o.frame, o.rate);
   
-  play(o.frame, o.rate);
-  
+ // play(o.frame, o.rate);
+ runAnimation(); // Запускаємо анімацію
 
 document.addEventListener('touchstart', handleTouchStart, false);        
 document.addEventListener('touchmove', handleTouchMove, false);
