@@ -184,7 +184,7 @@ v1.1.0: digest: sha256:283124ac1ae4c43cfe7893af85feed2ebda570943440b3c9161a8d763
 `kubectl set image deploy demo app=umanetsvitaliy/app:v1.1.0`
 
 
-- На другому терміналі вивід поточного стану на кластері
+- На другому терміналі вивід поточного стану на кластері  
 `kubectl get po -w`
 
 ![Infinity](.img/t2_infinity.png)  
