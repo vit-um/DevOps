@@ -180,7 +180,7 @@ v1.1.0: digest: sha256:283124ac1ae4c43cfe7893af85feed2ebda570943440b3c9161a8d763
 ```
 25. Реалізуємо оновлення версії проекту на нову без переривання сервісу, для чого запускаємо в двох окремих терміналах наступні команди:
 - Термінал 1 (команда оновлення версії):  
-`kubectl get deploy demo -o wide`
+`kubectl get deploy demo -o wide`  
 `kubectl set image deploy demo app=umanetsvitaliy/app:v1.1.0`
 
 
