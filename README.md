@@ -103,16 +103,7 @@ docker stop den-container
 
 ``` 
 
-
-18. Створюємо новий проект в [Google Cloud Console](https://console.cloud.google.com/)
-
-![Devops](.img/t2_gc_project.png)
-
-19. В правому сайтбарі шукаємо `Kubernetes Engine` та активуємо його кнопкою `Enable`  
-
-![Kubernetes](.img/t2_kubernetes.png)
-
-20. Встановимо k3d завантаживши його безпосередньо 
+18. Встановимо k3d завантаживши його безпосередньо 
 
 `curl -s https://raw.githubusercontent.com/rancher/k3d/main/install.sh | bash`
 
@@ -122,7 +113,7 @@ Preparing to install k3d into /usr/local/bin
 k3d installed into /usr/local/bin/k3d
 Run 'k3d --help' to see what you can do with it.
 ```
-21. Заходимо в робочу директорію проекту та запускаємо команду: `k3d cluster create Task2`  
+19. Заходимо в робочу директорію проекту та запускаємо команду: `k3d cluster create Task2`  
 
 ```
 INFO[0000] Prep: Network                                
@@ -149,14 +140,14 @@ INFO[0028] Cluster 'Task2' created successfully!
 INFO[0028] You can now use it like this:                
 kubectl cluster-info
 ```
-22. Переходимо на етап деплойменту для чого створимо кубернетіс деплоймент з посиланням на наш докерхаб:
+20. Переходимо на етап деплойменту для чого створимо кубернетіс деплоймент з посиланням на наш докерхаб:
 
 `kubectl create deploy demo --image umanetsvitaliy/app:v1.0.0`
 ```
 deployment.apps/demo created
 ```
 
-23. Зробимо локальний порт-форвардінг в контейнер та перевіримо як це працює 
+21. Зробимо локальний порт-форвардінг в контейнер та перевіримо як це працює 
 
 `kubectl port-forward deploy/demo 8080`
 ```
@@ -167,7 +158,7 @@ Handling connection for 8080
 ```
 Отже сервер знову працює в ізольованому просторі за адресою `http://localhost:8080/` але вже на іншому рівні, тепер нам доступні інструменти управління, моніторингу та контролю Кубернетіс. 
 
-24. Замикаємо процес розробки додаванням нових можливостей в програмний код нашого проектую. Для чого додамо в контент директорію svg файлів та змінимо код web-сторінки, щоб вона транслювала анімований сюжетний ряд. Після чого зберемо код та піднімемо версію проекту:
+22. Замикаємо процес розробки додаванням нових можливостей в програмний код нашого проектую. Для чого додамо в контент директорію svg файлів та змінимо код web-сторінки, щоб вона транслювала анімований сюжетний ряд. Після чого зберемо код та піднімемо версію проекту:
 
 `docker build . -t umanetsvitaliy/app:v1.1.0`  
 `docker push umanetsvitaliy/app:v1.1.0`  
@@ -178,7 +169,7 @@ The push refers to repository [docker.io/umanetsvitaliy/app]
 b44788e15260: Pushed 
 v1.1.0: digest: sha256:283124ac1ae4c43cfe7893af85feed2ebda570943440b3c9161a8d76388ec80f size: 738
 ```
-25. Реалізуємо оновлення версії проекту на нову без переривання сервісу, для чого запускаємо в двох окремих терміналах наступні команди:
+23. Реалізуємо оновлення версії проекту на нову без переривання сервісу, для чого запускаємо в двох окремих терміналах наступні команди:
 - Термінал 1 (команда оновлення версії):  
 `kubectl get deploy demo -o wide`  
 `kubectl set image deploy demo app=umanetsvitaliy/app:v1.1.0`
