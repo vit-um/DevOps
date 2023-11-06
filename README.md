@@ -186,7 +186,7 @@ v1.1.0: digest: sha256:283124ac1ae4c43cfe7893af85feed2ebda570943440b3c9161a8d763
 - На другому терміналі вивід поточного стану на кластері  
 `kubectl get po -w`
 
-26. Перевіряємо, що вийшло 
+26. Перевіряємо, що вийшло: 
 `kubectl get deploy demo -o wide`
 `kubectl port-forward deploy/demo 8080`
 
