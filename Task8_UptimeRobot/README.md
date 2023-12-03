@@ -226,3 +226,33 @@ demo2-864f955495-dgmvk   1/1     Running   0          82m   app=demo2,pod-templa
 13. Налаштуйте публічну status page додавши до неї другий Monitoring
 
 https://stats.uptimerobot.com/ZB6xysPxk1
+
+![Status 2](image-3.png)  
+
+## Зачистка:
+
+```sh
+$ gcloud container clusters delete demo --zone us-central1-a                          
+
+The following clusters will be deleted.
+ - [demo] in [us-central1-a]
+
+Do you want to continue (Y/n)?  Y
+
+Deleting cluster demo...done.                                                                                                                                                                                                                                                                     Deleted [https://container.googleapis.com/v1/projects/devops-55250/zones/us-central1-a/clusters/demo].
+
+$ docker images
+REPOSITORY                 TAG       IMAGE ID       CREATED        SIZE
+gcr.io/devops-55250/demo   v1.0.0    c613587b7e6b   4 months ago   4.26MB
+gcr.io/devops-55250/demo   v2.0.0    a996fa979dcd   4 months ago   4.26MB
+
+$ docker rmi c613587b7e6b
+Untagged: gcr.io/devops-55250/demo:v1.0.0
+Untagged: gcr.io/devops-55250/demo@sha256:5d7d48c7e01ae5e628eb5286622b0ce5b1cc412ab5767e848c3886473d44ef44
+Deleted: sha256:c613587b7e6b6f6ec82910313483164bfef8e07af13c5a6493aa4cbf80889be1
+
+$ docker rmi a996fa979dcd
+Untagged: gcr.io/devops-55250/demo:v2.0.0
+Untagged: gcr.io/devops-55250/demo@sha256:ff121a92885d0db7e612710d3e7fc06f3927b4327b9484ea6a107197ad976a04
+Deleted: sha256:a996fa979dcd85195b7c21e7f2da6ed85f4af3a90fe728365abb3832d8bc9c14
+```
