@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app-livenessprob
+  namespace: demo
+spec:
+  containers:
+    - image: gcr.io/k8s-k3s/demo:v1.0.0
+      name: app
+
+      livenessProbe:
+        httpGet:
+          path: /
+          port: 8000
+        initialDelaySeconds: 5
+        timeoutSeconds: 1
+        periodSeconds: 10
+        failureThreshold: 3
+        
+      ports:
+        - containerPort: 8080
+          name: http
