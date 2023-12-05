@@ -20,17 +20,7 @@ REVISION: 1
 3. This will deploy a boundle of microservices, databases, message broker and api-gateway with service called "ambassador".
 ```sh
 $ k get po --show-labels  
-NAME                                        READY   STATUS    RESTARTS   AGE    LABELS
-current-version-data-6ffb8f8645-skm7r       1/1     Running   0          5m5s   app=current-version-data,pod-template-hash=6ffb8f8645,version=v4
-current-version-api-dbc75f7b6-m9tpr         1/1     Running   0          5m5s   app=current-version-api,pod-template-hash=dbc75f7b6,version=v4
-current-version-img-68849cbb77-jzsqd        1/1     Running   0          5m5s   app=current-version-img,pod-template-hash=68849cbb77,version=v4
-current-version-ascii-76779ffbfd-hwnvv      1/1     Running   0          5m5s   app=current-version-ascii,pod-template-hash=76779ffbfd,version=v4
-current-version-nats-box-7cc65b6579-p8kfd   1/1     Running   0          5m5s   app=current-version-nats-box,pod-template-hash=7cc65b6579
-current-version-front-6d5bbd46bb-7dk7t      1/1     Running   0          5m5s   app=current-version-front,pod-template-hash=6d5bbd46bb,version=3.0.1
-cache-858575fc54-lz7lk                      1/1     Running   0          5m5s   app=cache,pod-template-hash=858575fc54
-db-7968646c85-672g8                         1/1     Running   0          5m5s   app=db,pod-template-hash=7968646c85
-current-version-nats-0                      3/3     Running   0          5m5s   app.kubernetes.io/instance=current-version,app.kubernetes.io/name=nats,controller-revision-hash=current-version-nats-5c95bdb489,statefulset.kubernetes.io/pod-name=current-version-nats-0
-ambassador-54bb4484c-59qfq                  1/1     Running   0          5m5s   pod-template-hash=54bb4484c,service=ambassador
+
 ```
 
 4. Forward the service port to your local machine:
@@ -57,11 +47,60 @@ k8sdiy-api:599e1af#
 ```
 
 6. You should get the current version of the api microservice in the response: k8sdiy-api:599e1af
-
 Finally, try to set new version and deploy a microservice using the following command:
 
-helm template new-version ./helm -s templates/api-deploy.yaml --set image.tag=build-802e329
+```sh
+$ helm template new-version ./helm -s templates/api-deploy.yaml --set image.tag=build-802e329 > new-version-manifest.yaml
+
+$ kubectl apply -f new-version-manifest.yaml
+deployment.apps/new-version-api created
+
+helm template new-version ./helm -s templates/api-deploy.yaml --set image.tag=build-802e329 | kubectl apply -f -
+
+$ k get po                                                                                                      
+NAME                                        READY   STATUS              RESTARTS   AGE
+new-version-api-57578dfdfb-zj7vc            0/1     ContainerCreating   0          4m30s
+
+$ k logs new-version-api-57578dfdfb-zj7vc 
+Error from server (BadRequest): container "api" in pod "new-version-api-57578dfdfb-zj7vc" is waiting to start: ContainerCreating
+
+$ k describe pod new-version-api-7bd8447c4f-zzvxw
+Events:
+  Type     Reason       Age               From               Message
+  ----     ------       ----              ----               -------
+  Normal   Scheduled    67s               default-scheduler  Successfully assigned default/new-version-api-7bd8447c4f-zzvxw to k3d-k3d-cluster-429-agent-2
+  Warning  FailedMount  3s (x8 over 67s)  kubelet            MountVolume.SetUp failed for volume "data" : configmap "new-version-configmap" not found
+
+$ k get events | grep Warning
+117s        Warning   FailedMount         pod/new-version-api-7bd8447c4f-zzvxw             MountVolume.SetUp failed for volume "data" : configmap "new-version-configmap" not found
+
+$ helm ls
+NAME            NAMESPACE       REVISION        UPDATED                                 STATUS          CHART           APP VERSION
+current-version default         1               2023-12-05 13:36:53.894866152 +0200 EET deployed        helm-0.1.0      1.0    
+
+$ k get configmaps
+$ k create configmap new-version-configmap --from-literal=key=demo -n default
+
+$ k describe pod new-version-api-57578dfdfb-8nbg8 | grep Warning
+  Warning  Failed     23m (x8 over 24m)     kubelet            Error: secret "new-version-secret" not found
+
+$ k get secrets 
+$ helm template new-version ./helm -s templates/secret.yaml 
+$ kubectl create secret generic new-version-secret --namespace=default --from-literal=license=MTIzNDU=
+
+$ k label pod new-version-api-57578dfdfb-x522w app=current-version-api --overwrite=true
+$ k delete deployment current-version-api
+$ k delete po current-version-api-dbc75f7b6-7cwbq
+
+
+```
 
 If you encounter an "ContainerCreating" message for Kubernetes pod, that is the first issue we need to resolve.
 
 Second request. The new version of the api microservice should be deployed at the same endpoint as the current version but not available publicly. Only qa team should be able to access it.
+
+```sh
+$ k delete deployments new-version-api 
+deployment.apps "new-version-api" deleted
+```
+
