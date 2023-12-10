@@ -1,0 +1,18 @@
+replicaCount: 1
+# v1.2.0-660ae95
+image:
+  registry: "ghcr.io"
+  repository: "vit-um/kbot"
+  pullPolicy: IfNotPresent  # Дозволяє замінити образ за замовчуванням
+  tag: v1.3.0-f602b09
+  os: linux
+  arch: amd64
+  parameter: go
+# Додатково визначте секцію для токену TELE_TOKEN
+secret:
+  name: "kbot"
+  env: "TELE_TOKEN"
+  key: "token" 
+  value: "NjU1MjQ2NzQ0OTpBQUZHR3k3WnREdjlpRExmdEx5OV85cDF5U0tNSTNkeU00aw=="
+securityContext:
+  privileged: true
