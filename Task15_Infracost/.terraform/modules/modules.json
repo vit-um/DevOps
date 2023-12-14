@@ -1,0 +1,1 @@
+{"Modules":[{"Key":"","Source":"","Dir":"."},{"Key":"gke_auth","Source":"registry.terraform.io/terraform-google-modules/kubernetes-engine/google//modules/auth","Version":"29.0.0","Dir":".terraform/modules/gke_auth/modules/auth"}]}
