@@ -4,60 +4,40 @@
 3. На віддаленому репозиторії натискаємо Edit -> Web IDE
 2. Створюємо файл `.gitlab-ci.yml` та починаємо описувати в ньому процес CI
 
-https://docs.gitlab.com/runner/install/docker.html
+sudo apt-get install certbot
+export EMAIL="vit@i.ua"   
+export DOMAIN="kbot.remote.gitlab.dev"
 
-docker run -d --name gitlab-runner --restart always \
-  -v /srv/gitlab-runner/config:/etc/gitlab-runner \
-  -v /var/run/docker.sock:/var/run/docker.sock \
-  gitlab/gitlab-runner:latest
-9c7792bd0f6f5e38043d394c3262c793b53fda966e67a30268755bce2523f893
+certbot -d "${DOMAIN}" \
+  -m "${EMAIL}" \
+  --config-dir ~/.certbot/config \
+  --logs-dir ~/.certbot/logs \
+  --work-dir ~/.certbot/work \
+  --manual \
+  --preferred-challenges dns certonly
 
- $ docker container ls
-CONTAINER ID   IMAGE                         COMMAND                  CREATED         STATUS         PORTS     NAMES
-9c7792bd0f6f   gitlab/gitlab-runner:latest   "/usr/bin/dumb-init …"   5 seconds ago   Up 4 seconds             gitlab-runner
+  
 
-docker images
-REPOSITORY             TAG       IMAGE ID       CREATED       SIZE
-gitlab/gitlab-runner   latest    982f26ce4e50   3 weeks ago   760MB
+Account registered.
+Requesting a certificate for kbot.remote.gitlab.dev
 
-https://docs.gitlab.com/runner/register/index.html
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Please deploy a DNS TXT record under the name:
 
-curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh | sudo bash
+_acme-challenge.kbot.remote.gitlab.dev.
 
-sudo apt-get install gitlab-runner
+with the following value:
 
-sudo gitlab-runner register --url https://gitlab.com/ --registration-token GR1348941yyZrwfRxzSCdh65NSi2S
+PFnD8RDL5sNS4wg5E34rPAIo0m_5ndPMkBFrGxlNoD4
 
-shell
-Runner registered successfully. Feel free to start it, but if it's running already the config should be automatically reloaded!
- 
-Configuration (with the authentication token) was saved in "/etc/gitlab-runner/config.toml" 
-
-
-![в](image.png)
-
-https://vitum-kbot-a5sm07jdp88.ws-eu107.gitpod.io/
-
-
-
-9.  instance : Цей варіант дозволяє запускати задачі без використання окремого виконавця. Ви можете використовувати цей варіант, якщо ви хочете виконувати задачі безпосередньо на машині GitLab Runner. 
- 
-10.  custom : Цей варіант дозволяє вам налаштувати власний виконавець для виконання задач. Ви можете використовувати цей варіант, якщо у вас є специфічні потреби або власна інфраструктура. 
- 
-11.  docker : Цей варіант використовує Docker для запуску контейнерів і виконання задач. Це може бути зручним варіантом для багатьох випадків використання, оскільки Docker надає ізольоване середовище та легко керується. 
-
-
-
-
-
+Before continuing, verify the TXT record has been deployed. Depending on the DNS
+provider, this may take some time, from a few seconds to multiple minutes. You can
+check if it has finished deploying with aid of online tools, such as the Google
+Admin Toolbox: https://toolbox.googleapps.com/apps/dig/#TXT/_acme-challenge.kbot.remote.gitlab.dev.
 
 
 3. Доопрацювати:
 - Запустити пейплайн  
 https://www.youtube.com/watch?v=jAIhhULc7YA  
 https://www.youtube.com/watch?v=phlsVGysQSw  
-https://habr.com/ru/articles/764568/
-https://habr.com/ru/companies/rostelecom/articles/546702/#gitlab_runner_install
-https://www.youtube.com/watch?v=phlsVGysQSw
-
 
