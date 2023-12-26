@@ -154,7 +154,7 @@ demo                 Active   4s
 ```sh
 $ git clone https://github.com/vit-um/flux-gitops.git
 $ cd ../flux-gitops 
-$ flux-gitops git:(main) flux create source git kbot \
+$ flux create source git kbot \
     --url=https://github.com/vit-um/kbot \
     --branch=main \
     --namespace=demo \
