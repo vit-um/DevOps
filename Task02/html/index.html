@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<!-- This should work everywhere -->
+<head>
+	<script type="text/javascript" src="./vivus.min.js"></script>
+  <script type="text/javascript">
+  
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms)); 
+}
+
+async function play(frame, s=500) {
+
+localStorage.frame_num = frame;
+
+document.getElementById('Main').innerHTML = "";
+
+
+   SVG = new Vivus('Main', {type: 'oneByOne', start:'manual', duration: s, file: './frame'+frame+'.svg',
+    onReady: function (obj) {
+    obj.play(2); }}, 
+    function (obj) { 
+    obj.el.classList.add('finished');
+  } );
+
+
+}
+function stop(s) {
+  s.stop();
+}
+
+async function runAnimation() {
+  for (let frame = 1; frame <= 15; frame++) {
+    await play(frame, 500); // Викликаємо функцію play зі зміненою frame
+    await sleep(6000);  // Очікуємо 500 мілісекунд (0.5 секунди)
+  }
+}
+
+</script>
+<style>
+/* Style */
+
+div {
+    height:100vh;
+      position: relative;
+}
+svg * {
+  fill-opacity: 0;
+  transition: fill-opacity 3s;
+}
+
+svg.finished * {
+  fill-opacity: 1;
+}
+
+
+</style>
+</head>
+<body>
+<div id="Main" align="center">
+  <script type="text/javascript">
+  
+  var SVG;
+  
+     var a = location.search.split(";");
+        var o = a.reduce(function(o, v) {
+            var kv = v.split("=");
+            kv[0] = kv[0].replace("?", "");
+            o[kv[0]] = kv[1];
+            return o;
+            },
+        {});
+
+  localStorage.pause = 0;
+ //console.log(o.frame, o.rate);
+  
+ // play(o.frame, o.rate);
+ runAnimation(); // Запускаємо анімацію
+
+document.addEventListener('touchstart', handleTouchStart, false);        
+document.addEventListener('touchmove', handleTouchMove, false);
+
+var xDown = null;                                                        
+var yDown = null;
+
+function getTouches(evt) {
+  return evt.touches ||             // browser API
+         evt.originalEvent.touches; // jQuery
+}                                                     
+
+function handleTouchStart(evt) {                                         
+    xDown = getTouches(evt)[0].clientX;                                      
+    yDown = getTouches(evt)[0].clientY;                                      
+};                                                
+
+function handleTouchMove(evt) {
+    if ( ! xDown || ! yDown ) {
+        return;
+    }
+
+    var xUp = evt.touches[0].clientX;                                    
+    var yUp = evt.touches[0].clientY;
+
+    var xDiff = xDown - xUp;
+    var yDiff = yDown - yUp;
+
+    if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {/*most significant*/
+        if ( xDiff > 0 ) {
+            play(++localStorage.frame_num);
+        } else {
+            play(--localStorage.frame_num);
+        }                       
+    } else {
+        if ( yDiff > 0 ) {
+            
+        } else { 
+            play(1);
+        }                                                                 
+    }
+    /* reset values */
+    xDown = null;
+    yDown = null;                                             
+};
+
+  document.addEventListener("keydown",   function(event) {
+ //   console.log(event.which);
+
+ switch (event.which) {
+  case 39: 
+     play(++localStorage.frame_num);
+      break
+  case 37: 
+      play(--localStorage.frame_num);
+       break
+  case 32:
+    if (localStorage.pause == 0 ) {
+    SVG.stop();
+    localStorage.pause = 1;
+  }else{
+    SVG.play(1);
+    localStorage.pause = 0;
+  }
+  break
+ }
+  });
+
+
+</script>
+</div>
+</body>
+</html>

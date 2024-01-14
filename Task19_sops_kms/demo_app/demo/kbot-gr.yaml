@@ -1,0 +1,11 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: kbot
+  namespace: demo
+spec:
+  interval: 1m0s
+  ref:
+    branch: main
+  url: https://github.com/vit-um/kbot
