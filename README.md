@@ -5,6 +5,7 @@
 ## [Task02](Task02/README.md) - Реалізувати  Web-сервіс у власному середовищі розробки  
 ## [Task03](Task03/README.md) - Створення специфікації контейнера та процес налаштування мережі  
 ## [Task04](Task04/README.md) - Застосування утиліти `Dive` в процесі CI/CD тестування  
-## [Task05](Task05/README.md) - Програмування телеграм бота на мові Golang на різних платформах та архітектурах, включаючи Linux, arm, macOS та Windows   
+## [Task05](Task05_kbot/README.md) - Програмування телеграм бота на мові Golang на різних платформах та архітектурах, включаючи Linux, arm, macOS та Windows  
+## [Task06](Task06_AsciiArtify/README.md) - Порівняльний аналіз трьох інструментів для розгортання Kubernetes кластерів в локальному середовищі — minikube, kind та k3d на прикладі застосунку AsciiArtify  
 ## [Task10](Task10_ambassador/README.md) - Підготувати `helm template` з необхідними параметрами для розгортання нової версії мікросервісу    
 ## [Task11](Task11_helm/README.md) - Підготувати Helm-пакет як реліз продукту в GitHub   
