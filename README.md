@@ -6,7 +6,7 @@
 ## [Task03](Task03/README.md) - Створення специфікації контейнера та процес налаштування мережі  
 ## [Task04](Task04/README.md) - Застосування утиліти `Dive` в процесі CI/CD тестування  
 ## [Task05](Task05_kbot/README.md) - Програмування телеграм бота на мові Golang на різних платформах та архітектурах, включаючи Linux, arm, macOS та Windows  
-## [Task06](Task06_AsciiArtify/README.md) - Порівняльний аналіз трьох інструментів для розгортання Kubernetes кластерів в локальному середовищі — minikube, kind та k3d на прикладі застосунку AsciiArtify та ArgoCD в якості інструменту CD  
+## [Task06](Task06_AsciiArtify/README.md) - Розгортання Kubernetes кластерів в локальному середовищі k3d на прикладі застосунку AsciiArtify та ArgoCD в якості інструменту CD    
 
 
 
