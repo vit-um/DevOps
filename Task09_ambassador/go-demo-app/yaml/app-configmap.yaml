@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app-config
+spec:
+  containers:
+    - name: mypod
+      image: redis
+      imagePullPolicy: Always
+      env:
+        - name: CONFIGMAP_PARAM
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: config-param
+      volumeMounts:
+        - name: config-volume
+          mountPath: /config
+  volumes:
+    - name: config-volume
+      configMap:
+        name: app-config
+  restartPolicy: Never

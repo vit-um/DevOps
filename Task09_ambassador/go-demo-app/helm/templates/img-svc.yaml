@@ -1,0 +1,30 @@
+{{- define "img-canary-weight" }}{{ if .Values.img.canary }}weight: {{.Values.img.canary}}{{ end }} {{- end }}
+{{- define "img-canary-header" }}{{ if .Values.img.header  }}headers:{{ end }} {{- end }}
+{{- define "img-canary-header-mode" }}{{ if .Values.img.header  }}x-mode: {{ .Values.img.header }}{{ end }} {{- end }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-img
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: img
+    version: {{ .Values.app.version }}
+  annotations:
+   getambassador.io/config: |
+      ---
+      apiVersion: ambassador/v1
+      kind:  Mapping
+      name:  {{ .Release.Name }}-img
+      prefix: /img/
+      service: {{ .Release.Name }}-img
+      {{include "img-canary-header" .}}
+        {{include "img-canary-header-mode" .}}
+      {{include "img-canary-weight" .}}
+spec:      
+  ports:
+  - name: http
+    port: 80
+    targetPort: {{ .Values.img.port }}
+  selector:
+    app: {{ .Release.Name }}-img

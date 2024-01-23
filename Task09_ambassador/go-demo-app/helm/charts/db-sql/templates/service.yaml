@@ -1,0 +1,16 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: db
+spec:
+  ports:
+  - name: tcp-db
+    port: 3306
+    targetPort: 3306
+  selector:
+    app: db
+

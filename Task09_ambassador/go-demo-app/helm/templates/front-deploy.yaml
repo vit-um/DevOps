@@ -1,0 +1,32 @@
+---
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-front
+  namespace: {{ .Release.Namespace }}
+  labels:
+    version: {{ .Values.front.version }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-front
+  replicas: {{ .Values.front.replicas}}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-front
+        version: {{ .Values.front.version }}
+    spec:
+      containers:
+      - name: front
+        image: {{ .Values.image.name }}:{{ .Values.image.tag }}
+        imagePullPolicy: Always
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        ports:
+        - containerPort: {{ .Values.front.port }}
+          name: http-front
+        securityContext:
+        

@@ -1,0 +1,20 @@
+{{- define "canary-weight" }}{{ if gt .Values.data.canary 0.0 }}weight: {{.Values.data.canary}}{{ end }} {{- end }}
+{{- define "canary-header" }}{{ if .Values.data.header  }}headers:{{ end }} {{- end }}
+{{- define "canary-header-mode" }}{{ if .Values.data.header  }}x-mode: {{ .Values.data.header }}{{ end }} {{- end }}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-data
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: data
+    version: {{ .Values.app.version }} 
+spec:
+  ports:
+  - name: http
+    port: 80
+    targetPort: {{ .Values.data.port }}
+  selector:
+    app: {{ .Release.Name }}-data

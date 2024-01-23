@@ -1,0 +1,34 @@
+{{ if .Values.enable }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    service: {{ .Values.app.name }}
+  name: {{ .Values.app.name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+  - name: {{ .Values.app.name }}-http
+    port: {{ .Values.service.port }}
+    targetPort: {{ .Values.service.port }}
+  selector:
+    service: {{ .Values.app.name }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    service: {{ .Values.app.name }}-admin
+  name: {{ .Values.app.name }}-admin
+  namespace: {{ .Release.Namespace }}
+spec:
+  type: ClusterIP
+  ports:
+  - name: {{ .Values.app.name }}-admin
+    port: 8877
+    targetPort: 8877
+  selector:
+    service: {{ .Values.app.name }}
+{{- end}}

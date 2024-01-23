@@ -1,0 +1,48 @@
+{{ if eq .Values.app.version "v3" }}
+---
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-ml5
+  namespace: {{ .Release.Namespace }}
+  labels:
+    version: {{ .Values.app.version }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-ml5
+  replicas: {{ .Values.ml5.replicas }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-ml5
+        version: {{ .Values.app.version }}
+    spec:
+      containers:
+      - name: ml5
+        image: {{ .Values.image.name }}:{{ .Values.image.tag }}
+        command:
+          - ./app
+          - "-role" 
+          - "ml5"
+        imagePullPolicy: Always
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        ports:
+        - containerPort: 80
+        securityContext:
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: {{ .Values.ml5.port }}
+          initialDelaySeconds: 10
+          periodSeconds: 3
+        readinessProbe:
+          httpGet:
+            path: /readinez
+            port: {{ .Values.ml5.port }}
+          initialDelaySeconds: 15
+          periodSeconds: 3
+{{- end}}

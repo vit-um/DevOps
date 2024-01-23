@@ -1,0 +1,57 @@
+app:
+  name: k8sdiy
+  version: v4
+  port: 80
+image:
+  name: denvasyliev/k8sdiy
+  tag: build-599e1af
+front:
+  version: 3.0.1
+  replicas: 1
+  canary: 0
+  header: ""
+  port: 8080
+  tag: front-v3.0.2
+api:
+  replicas: 1
+  canary: 0
+  header: ""
+  port: 8080
+ascii:
+  replicas: 1
+  canary: 0
+  header: ""
+  port: 8080
+img:
+  replicas: 1
+  canary: 0
+  header: ""
+  port: 8080
+ml5:
+  replicas: 1
+  canary: 0
+  header: ""
+  port: 8080
+data:
+  replicas: 1
+  port: 8080
+  svc: data
+db:
+  svc: db
+  port: 3306
+cache:
+  svc: cache
+  port: 6379
+nats:
+  enable: true
+  size: 1
+  service:
+    name: nats-cluster
+    port: 4222
+ns:
+  enable: false
+api-gateway:
+  image:
+    tag: 0.51.2
+  service:
+    type: NodePort

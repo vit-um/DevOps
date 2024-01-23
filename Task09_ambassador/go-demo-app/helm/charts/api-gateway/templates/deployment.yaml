@@ -1,0 +1,50 @@
+{{ if .Values.enable }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.app.name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  selector:
+    matchLabels:
+      service: {{ .Values.app.name }}
+  replicas: {{ .Values.app.replicas }}
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+      labels:
+        service: {{ .Values.app.name }}
+    spec:
+      serviceAccountName: {{ .Values.app.name }}
+      containers:
+      - name: {{ .Values.app.name }}
+        image: {{ .Values.image.repository }}/{{ .Values.app.name }}:{{ .Values.image.tag }}
+        resources:
+          limits:
+            cpu: {{ .Values.resources.limits.cpu }}
+            memory: {{ .Values.resources.limits.memory }}
+          requests:
+            cpu: {{ .Values.resources.requests.cpu }}
+            memory: {{ .Values.resources.requests.memory }}
+        env:
+        - name: AMBASSADOR_SINGLE_NAMESPACE
+          value: {{ .Release.Namespace }}
+        - name: AMBASSADOR_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace          
+        livenessProbe:
+          httpGet:
+            path: /ambassador/v0/check_alive
+            port: 8877
+          initialDelaySeconds: 30
+          periodSeconds: 3
+        readinessProbe:
+          httpGet:
+            path: /ambassador/v0/check_ready
+            port: 8877
+          initialDelaySeconds: 30
+          periodSeconds: 3
+{{- end}}

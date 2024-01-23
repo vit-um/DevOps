@@ -1,0 +1,55 @@
+---
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-data
+  namespace: {{ .Release.Namespace }}
+  labels:
+    version: {{ .Values.app.version }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-data
+  replicas: {{ .Values.data.replicas }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-data
+        version: {{ .Values.app.version }}
+    spec:
+      containers:
+      - name: data
+        image: {{ .Values.image.name }}:{{ .Values.image.tag }}
+        command:
+          - ./app
+          - "-role"
+          - "data"
+          - "-server"
+          - {{ .Values.nats.service.name }}
+        env:
+          - name: APP_DB
+            value: "root@tcp(db:3306)/demo"
+          - name: APP_CACHE
+            value: "{{ .Values.cache.svc }}"
+          - name: APP_CACHE_PORT
+            value: "{{ .Values.cache.port }}"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        ports:
+        - containerPort: 8080
+        name: data
+        securityContext:
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: {{ .Values.data.port }}
+          initialDelaySeconds: 3
+          periodSeconds: 3
+        readinessProbe:
+          httpGet:
+            path: /readinez
+            port: {{ .Values.data.port }}
+          initialDelaySeconds: 0
+          periodSeconds: 3

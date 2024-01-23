@@ -1,13 +1,13 @@
 {
 	"ociVersion": "1.0.2-dev",
 	"process": {
-		"terminal": true,
+		"terminal": false,
 		"user": {
 			"uid": 0,
 			"gid": 0
 		},
 		"args": [
-			"sh"
+			"sh", "-c", "while true; do { echo -e 'HTTP/1.1 200 OK\n\n Version: 1.0.0'; } | nc -vlp 8080; done"
 		],
 		"env": [
 			"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",

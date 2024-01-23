@@ -1,0 +1,33 @@
+{{- define "canary-weight" }}{{ if .Values.front.canary }}weight: {{.Values.front.canary}}{{ end }} {{- end }}
+{{- define "canary-header" }}{{ if .Values.front.header  }}headers:{{ end }} {{- end }}
+{{- define "canary-header-mode" }}{{ if .Values.front.header  }}x-mode: {{ .Values.front.header }}{{ end }} {{- end }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-front
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: front
+    version: {{ .Values.front.version }}
+  annotations:
+    
+    getambassador.io/config: |
+      ---
+      apiVersion: ambassador/v1
+      kind:  Mapping
+      name:  {{ .Release.Name }}-front
+      prefix: /
+      service: {{ .Release.Name }}-front
+      {{include "canary-header" .}}
+        {{include "canary-header-mode" .}}
+      {{include "canary-weight" .}}
+       
+spec:
+  ports:
+  - name: http-front
+    port: {{ .Values.app.port }}
+    targetPort: {{ .Values.front.port }}
+  selector:
+    app: {{ .Release.Name }}-front
+

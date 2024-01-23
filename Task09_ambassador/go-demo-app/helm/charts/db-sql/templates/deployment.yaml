@@ -1,0 +1,31 @@
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: db
+  namespace: {{ .Release.Namespace }}
+  labels:
+    service: db
+spec:
+  selector:
+    matchLabels:
+      app: db
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: db
+    spec:
+      containers:
+      - name: db
+        image: mysql  # or just image: percona
+        env:
+        - name: MYSQL_ALLOW_EMPTY_PASSWORD
+          value: "true"
+        - name: MYSQL_DATABASE
+          value: "demo"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        ports:
+        - containerPort: 3306

@@ -1,45 +1,31 @@
-# Практичне завдання 3. Створення специфікації контейнера та процес налаштування мережі.
+# Практичне завдання. Застосування утиліти `Dive` в процесі CI/CD тестування
 
-1. Дії виконуються в [google cloud shell](https://shell.cloud.google.com/) 
-2. Встановлюємо утиліту для запису дій в термінальній сесії. Та починаємо запис.  
+Потрібно записати демонстрацію процесу використання утиліти з наступним параметром:  
+  `dive --ci --lowestEfficiency=0.9 <image_name>`
+для подальшого її використання в процесах автоматизованого тестування образу.
+
+## Сценарій
 ```bash
-mkdir demo && cd demo
-sudo apt-get install asciinema
-asciinema rec -i 1
-```  
-3. Створюємо файл специфікації для ініціалізації контейнеру `runc spec`
-
-```bash
-runc spec
-ls -l
-nano config.json
-# "path": "/var/run/netns/runc"
-sudo bash
-brctl addbr runc0
-ip link set runc0 up
-ip addr add 192.168.0.1/24 dev runc0
-ip a show runc0
-ip link add name veth-host type veth peer name veth-guest
-ip a show veth-host
-ip link set veth-host up
-brctl show runc0
-brctl addif runc0 veth-host
-brctl show runc0
-
-ip netns add runc
-ip netns ls
-
-# та namespace runc, що ми вказували у файлі специфікації
- ip link set veth-guest netns runc
-
-# за допомогою 'netns exec' виконуємо налаштування саме в namespace. Вкажемо ім'я та налаштуємо інтерфейс eth1
- ip netns exec runc ip link set veth-guest name eth1
-
-# призначимо інтерфейсу в контейнері IP адресу 
- ip netns exec runc ip addr add 192.168.0.2/24 dev eth1
-# піднімаємо link
- ip netns exec runc ip link set eth1 up
-# додамо маршрут за замовчуванням через хост інтерфейс 
- ip netns exec runc ip route add default via 192.168.0.1
- exit
+asciinema rec -i 1 
+make image
+dive {sha256}
+dive --ci --lowestEfficiency=0.99 {sha256}
+# Result:FAIL [Total:3] [Passed:1] [Failed:1] [Warn:0] [Skipped:1]
+wget https://raw.githubusercontent.com/wagoodman/dive/main/.data/.dive-ci
+dive --ci {sha256}
+# Result:PASS [Total:3] [Passed:3] [Failed:0] [Warn:0] [Skipped:0]  {0.99  300kb 0.03}
+nano .dive-ci 
+dive --ci {sha256}
+# Result:FAIL [Total:3] [Passed:0] [Failed:3] [Warn:0] [Skipped:0]
+rm .dive-ci
+docker images 
+docker rmi
+nano Makefile 
+make dive
+# Result:FAIL [Total:3] [Passed:1] [Failed:1] [Warn:0] [Skipped:1]
+nano Dockerfile
+make dive
+# Result:PASS [Total:3] [Passed:2] [Failed:0] [Warn:0] [Skipped:1]
 ```
+## Запис 
+![Image](./622097.gif)  

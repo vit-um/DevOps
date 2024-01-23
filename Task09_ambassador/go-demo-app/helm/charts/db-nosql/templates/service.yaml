@@ -1,0 +1,16 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cache
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: cache
+spec:
+  ports:
+  - name: tcp-cache
+    port: 6379
+    targetPort: 6379
+  selector:
+    app: cache
+

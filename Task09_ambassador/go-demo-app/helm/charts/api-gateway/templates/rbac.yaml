@@ -1,0 +1,43 @@
+{{ if .Values.enable }}
+---
+# Source: ambassador/templates/rbac.yaml
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ .Values.app.name }}
+  namespace: {{ .Release.Namespace }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ .Values.app.name }}
+  namespace: {{ .Release.Namespace }}
+rules:
+- apiGroups: [""]
+  resources:
+  - services
+  verbs: ["get", "list", "watch"]
+- apiGroups: [""]
+  resources:
+  - configmaps
+  verbs: ["create", "update", "patch", "get", "list", "watch"]
+- apiGroups: [""]
+  resources:
+  - secrets
+  verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ .Values.app.name }}
+  namespace: {{ .Release.Namespace }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ .Values.app.name }}
+subjects:
+- kind: ServiceAccount
+  name: {{ .Values.app.name }}
+  namespace: {{ .Release.Namespace }}
+{{- end}}

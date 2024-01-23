@@ -1,0 +1,46 @@
+# This file is a template, and might need editing before it works on your project.
+# You can copy and paste this template into a new `.gitlab-ci.yml` file.
+# You should not add this template to an existing `.gitlab-ci.yml` file by using the `include:` keyword.
+#
+# To contribute improvements to CI/CD templates, please follow the Development guide at:
+# https://docs.gitlab.com/ee/development/cicd/templates.html
+# This specific template is located at:
+# https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Go.gitlab-ci.yml
+
+image: golang:latest
+
+include: 
+  - project: vit-um/secops
+    file: /templates/.gitlab-ci-secrets-scan.yaml
+    ref: feature/secret-scan
+
+stages:
+  - test
+  - build
+  - deploy
+
+secrets-test:
+  extends: .secrets-scanning
+  variables:
+    GITLEAKS_GIT_LOSS: "HEAD~1^..HEAD"
+
+format:
+  stage: test
+  script:
+    - go fmt $(go list ./... | grep -v /vendor/)
+    - go vet $(go list ./... | grep -v /vendor/)
+    - go test -race $(go list ./... | grep -v /vendor/)
+
+compile:
+  stage: build
+  script:
+    - mkdir -p mybinaries
+    - go build -o mybinaries ./...
+  artifacts:
+    paths:
+      - mybinaries
+
+deploy:
+  stage: deploy
+  script: echo "Define your deployment script!"
+  environment: production

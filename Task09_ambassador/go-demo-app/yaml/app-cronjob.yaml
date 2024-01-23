@@ -1,0 +1,15 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: app-cronjob
+spec:
+  schedule: "*/5 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: hello
+              image: bash
+              command: ["echo",  "Hello world"]
+          restartPolicy: OnFailure

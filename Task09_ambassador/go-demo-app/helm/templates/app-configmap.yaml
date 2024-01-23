@@ -1,0 +1,10 @@
+apiVersion: v1
+data:
+  key: demo
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name}}-configmap
+  namespace: {{ .Release.Namespace }}
+  labels:
+    version: {{ .Values.app.version }}
+  
